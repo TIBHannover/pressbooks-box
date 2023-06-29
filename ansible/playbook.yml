@@ -1,5 +1,15 @@
----
-# TODO start adding roles to your playbook!
-#- hosts: all
-#  roles:
-#    - yourrole
+
+- hosts: all
+  roles:
+  - mariadb
+  - php
+  - role: oefenweb.wordpress
+    become: true
+  - role: wordpress-config
+    become: true
+  - role: apache
+    become: true
+    tags: apache
+    when: install_apache
+  - role: pressbooks
+    become: true

@@ -1,0 +1,38 @@
+---
+- name: Install apache
+  apt:
+    name: ["apache2"]
+    state: "present"
+
+- name: apache - add virtual hosts
+  template:
+    src: '{{ apache_vhost_template_path | default("apache_vhost.conf.j2") }}'
+    dest: '/etc/apache2/sites-available/{{ item.title }}.conf'
+  vars:
+    item: '{{ item }}'
+  loop: '{{ wordpress_installs }}'
+
+- name: apache - enabled mod_rewrite
+  apache2_module:
+    name: "{{ item }}"
+    state: "present"
+  loop: '{{ apache2_modules }}'
+
+- name: a2dissite default
+  file:
+    path: /etc/apache2/sites-enabled/000-default.conf
+    state: absent
+  notify:
+    - restart apache2
+
+- name: a2ensite
+  file:
+    path: '/etc/apache2/sites-enabled/{{ item.title }}.conf'
+    src: '../sites-available/{{ item.title }}.conf'
+    state: link
+  loop: '{{ wordpress_installs }}'    
+  notify:
+    - restart apache2
+
+- name: restart apache2
+  service: name=apache2 state=restarted

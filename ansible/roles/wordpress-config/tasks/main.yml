@@ -1,0 +1,5 @@
+---
+- include: multisite-network.yml
+
+- include: reverseproxy.yml
+  when: wp_config_reverse_proxy

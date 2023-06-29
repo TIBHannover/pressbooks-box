@@ -3,7 +3,7 @@ settings = YAML.load_file 'inventory_vagrant.yml'
 
 Vagrant.configure("2") do |config|
     config.vm.define "pressbooks-vm" do |srv|
-      srv.vm.box = "debian/bullseye64"
+      srv.vm.box = "debian/bookworm64"
       srv.ssh.insert_key = false
       srv.vm.hostname = "pressbooks.box"
       srv.vm.network :private_network, ip: settings['all']['vars']['box_ip']

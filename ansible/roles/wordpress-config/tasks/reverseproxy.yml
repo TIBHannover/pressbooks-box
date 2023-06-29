@@ -1,0 +1,16 @@
+---
+- name: Copy wp-proxy-config.php
+  copy:
+    src: "wp-proxy-config.php"
+    dest: "{{ item.path }}/wp-proxy-config.php"
+    group: "{{ item.group | default('www-data') }}"
+    owner: "{{ item.owner | default('www-data') }}"
+  loop: "{{ wordpress_installs }}"
+
+- name: Activate wp-proxy-config.php
+  lineinfile:
+    path: "{{ item.path }}/wp-config.php"
+    line: "include_once ABSPATH . 'wp-proxy-config.php';"
+    regexp: "^include_once ABSPATH . 'wp-proxy-config.php';"
+    insertbefore: "require_once ABSPATH . 'wp-settings.php';"
+  loop: "{{ wordpress_installs }}"

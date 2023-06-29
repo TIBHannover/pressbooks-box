@@ -1,0 +1,59 @@
+---
+- name: download plugin
+  get_url:
+    url: '{{ pressbooks_plugin_archive_url }}'
+    dest: "{{ item.path }}/wp-content/plugins/pressbooks.zip"
+    owner: root
+    group: root
+    mode: 0644
+  loop: "{{ wordpress_installs }}"
+
+- name: install pressbooks plugin
+  command: >
+    wp-cli --allow-root --no-color --path='{{ item.path }}' --force plugin install {{ item.path }}/wp-content/plugins/pressbooks.zip
+  loop: "{{ wordpress_installs }}"
+
+- name: activate pressbooks plugin
+  command: >
+    wp-cli --allow-root --no-color --path='{{ item.path }}' plugin activate pressbooks
+  loop: "{{ wordpress_installs }}"
+
+- name: assure mu-plugins exists
+  file: path='{{ item.path }}/wp-content/mu-plugins' state=directory
+  loop: "{{ wordpress_installs }}"
+
+- name: copy autoloader file
+  copy:
+    remote_src: true
+    src: '{{ item.path }}/wp-content/plugins/pressbooks/hm-autoloader.php'
+    dest: '{{ item.path }}/wp-content/mu-plugins/hm-autoloader.php'
+  loop: "{{ wordpress_installs }}"
+
+- name: download theme pressbooks books
+  get_url:
+    url: '{{ pressbooks_book_theme_archive_url }}'
+    dest: "{{ item.path }}/wp-content/themes/pressbooks-book.zip"
+    owner: root
+    group: root
+    mode: 0644
+  loop: "{{ wordpress_installs }}"
+
+- name: download theme pressbooks aldine
+  get_url:
+    url: '{{ pressbooks_aldine_theme_archive_url }}'
+    dest: "{{ item.path }}/wp-content/themes/pressbooks-aldine.zip"
+    owner: root
+    group: root
+    mode: 0644
+  loop: "{{ wordpress_installs }}"
+
+- name: install pressbooks books theme
+  command: >
+    wp-cli --allow-root --no-color --path='{{ item.path }}' --force theme install {{ item.path }}/wp-content/themes/pressbooks-book.zip --activate
+  loop: "{{ wordpress_installs }}"
+
+- name: install pressbooks aldine theme
+  command: >
+    wp-cli --allow-root --no-color --path='{{ item.path }}' --force theme install {{ item.path }}/wp-content/themes/pressbooks-aldine.zip --activate
+  loop: "{{ wordpress_installs }}"
+

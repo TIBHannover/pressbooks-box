@@ -1,0 +1,34 @@
+---
+- name: permalink structure
+  # needs pretty permalinks
+  command: >
+    wp-cli --allow-root --no-color --path='{{ item.path }}' rewrite structure '{{ item.permalink_structure | default("/%postname%/") }}' --hard
+  loop: "{{ wordpress_installs }}"
+
+- name: allow multisite
+  lineinfile:
+    path: "{{ item.path }}/wp-config.php"
+    line: "define( 'WP_ALLOW_MULTISITE', true );"
+    regexp: "^define( ?'WP_ALLOW_MULTISITE', ?true ?);"
+    insertafter: "^define\\("
+  loop: "{{ wordpress_installs }}"
+
+- name: create network
+  command: >
+    wp-cli --allow-root --no-color --path='{{ item.path }}' core multisite-install --title="{{ item.title }}" --admin_user="{{ item.admin_name }}" --admin_password="{{ item.admin_password }}" --admin_email="{{ item.admin_email }}"
+  loop: "{{ wordpress_installs }}"
+
+- name: Check if .htaccess exists
+  stat:
+    path: "{{ item.path }}/.htaccess"
+  register: htaccess_stat_results
+  loop: "{{ wordpress_installs }}"
+    
+- name: Create .htaccess, if it doesnt exist already
+  copy:
+    src: ".htaccess"
+    dest: "{{ item.0.path }}/.htaccess"
+    owner: www-data
+    group: www-data
+  when: not item.1.stat.exists
+  loop: "{{ wordpress_installs | zip(htaccess_stat_results.results) | list }}"

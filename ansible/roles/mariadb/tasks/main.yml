@@ -1,0 +1,25 @@
+---
+- name: Ensures /etc/my.cnf.d dir exists
+  file: path=/etc/my.cnf.d/ state=directory
+  become: yes
+
+- name: Configure MariaDB
+  template:
+    src: mysql.cnf
+    dest: /etc/my.cnf.d/mysql.cnf
+  become: yes
+  
+- name: Install MariaDB server package
+  package:
+    name: mariadb-server
+    state: present
+  become: yes
+  
+- name: Start Mysql Service
+  service:
+    name: mysql
+    state: started
+    enabled: true
+  become: yes
+  
+- include: init-database.yml

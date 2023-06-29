@@ -1,0 +1,7 @@
+---
+- name: install php
+  apt:
+    name: [ "php", "libapache2-mod-php", "php-mysql", "php-gd", "php-xml", "php-curl" ]
+    state: present
+  become: true
+  

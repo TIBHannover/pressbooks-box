@@ -1,0 +1,21 @@
+---
+- name: Ensure mysql python packages are present
+  package:
+    name: python3-mysqldb
+  become: yes
+
+- name: Create a new database
+  mysql_db:
+    name: '{{ dbname }}'
+    encoding: 'utf8'
+    collation: 'utf8_bin'
+    config_file: /etc/my.cnf.d/mysql.cnf
+    state: present
+  become: yes
+
+- name: Create database user
+  mysql_user:
+    name: '{{ dbuser }}'
+    password: '{{ dbpassword }}'
+    priv: '{{ dbname }}.*:ALL'
+  become: yes

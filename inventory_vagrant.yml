@@ -5,3 +5,13 @@ all:
     ansible_ssh_user: vagrant
     ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
     box_ip: 192.168.98.141
+
+    wp_title: pressbooks-example
+    wp_admin_name: admin
+    wp_admin_email: root@pressbooks.box
+    wp_admin_password: changeme
+
+    dbname: wordpress
+    dbuser: wordpress
+    dbpassword: changeme
+    dbport: 3306
