@@ -1,0 +1,4 @@
+app_name: "Your Application Name"
+vagrant_box_ip: "192.168.98.141"
+license: "MIT" # choose from "APACHE_2.0", "GNU_GPL_3", "MIT"
+licensor: "Technische Informationsbibliothek (TIB)"

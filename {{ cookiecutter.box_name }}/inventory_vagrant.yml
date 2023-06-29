@@ -1,0 +1,7 @@
+all:
+  hosts:  
+    {{ cookiecutter.vagrant_box_ip }}:
+  vars:
+    ansible_ssh_user: vagrant
+    ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
+    box_ip: {{ cookiecutter.vagrant_box_ip }}

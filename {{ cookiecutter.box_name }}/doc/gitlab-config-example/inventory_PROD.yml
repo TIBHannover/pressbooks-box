@@ -1,0 +1,11 @@
+all:
+  hosts:
+    your.prod.host:
+      # connection variables
+      ansible_ssh_user: user              # your "work-user"
+      ansible_become_method: su           # become_method for root privileges, if necessary in the box
+      ansible_become_password: changeme
+      ansible_become_flags: '-'
+      
+      # group variables
+      # Set all group-specific ansible variables here that are required to install the Box.
