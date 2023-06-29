@@ -3,10 +3,10 @@
   tasks:
     - name: checkout box locally
       git:
-        repo: '{{ cookiecutter.repo_url }}'
-        dest: {% raw %}'{{ inventory_dir }}/box'{% endraw %}
+        repo: 'https://github.com/TIBHannover/pressbooks-box'
+        dest: '{{ inventory_dir }}/box'
         force: yes
-        version: {% raw %}'{{ box_version | default("master") }}'{% endraw %}
+        version: '{{ box_version | default("master") }}'
       delegate_to: localhost
     
     - name: install required ansible-galaxy roles

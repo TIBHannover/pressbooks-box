@@ -1,30 +1,41 @@
-# Template for creating an application-setup-box
+# Your Application Name Setup
 
-This template should help to set up a new "application-setup-box" (or "ansible-vagrant-box") as easy as possible. Such a box contains [Ansible](https://www.ansible.com/) scripts that are used to install an application / service automatically on any system. 
+Install and update Your Application Name automatically via [Ansible](https://www.ansible.com/). Integrate it into your CI/CD process or test it locally with [Vagrant](https://www.vagrantup.com) and [VirtualBox](https://www.virtualbox.org).
 
-The integration of [Vagrant](https://www.vagrantup.com/) also makes it possible to execute the installation in a local virtual box on the user's computer. This allows the installation / software to be tested very easily and quickly.
+## Local installation with Vagrant for testing
 
-Additionally, a configuration example is provided that allows easy integration of the installation scripts into a CI process.
+Scenario: To test Your Application Name a little bit with minimal effort, you can use a local installation in the local VirtualBox VM via Vargant. This is also suitable for developers to perform "system tests" for their changes.
 
-## Requirements
+Prerequisites
+* [Git](https://git-scm.com/downloads)
+* [Vagrant](https://www.vagrantup.com/downloads.html)
+* [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
-* You need a [GitHub Account](https://github.com/join)
-* Your new box will be created in GitHub
-* No local installations, tools or frameworks are required
+Perform the following steps in the terminal (Linux / macOS) or in the GitBash (Windows):
+```bash
+git clone https://github.com/TIBHannover/pressbooks-box.git
+cd pressbooks-box
+vagrant up
+```
 
-## Create a new box from this template
+When the installation is complete, Your Application Name will be running on
+* 192.168.98.141
 
-1. In this github-repo, click the green button `Use this template` or click [here](../../generate)
-1. Enter a name for the new box and click `Create repository from template`
-1. In the created repository you have to finalize the setup of the box - head over to this repository now.
-    1. Edit the configuration of the box in [box-config.yaml](box-config.yaml) completely to your needs and commit the changes
-    1. After committing to GitHub, a [GitHub Action](../../actions) is started automatically that initializes the repo. Wait until this is complete.
-    1. Done, your Box should be ready now.
+### Helpful Vagrant commands
 
-## Why does it take several steps to create the new box?
+* `vagrant up` - Creates a new VM and runs the Ansible playbook, if no VM exists. Turn on a shut down VM, if the VM was created before
+* `vagrant halt` - Shuts down the VM
+* `vagrant destroy` - Removes the VM
+* `vagrant reload --provision` - Restarts the VM and re-runs the Ansible playbook 
+* `vagrant provision` - Re-runs the Ansible playbook without updating the ansible-scripts and without restarting the VM
+* `vagrant ssh` - SSH into the running VM
 
-Currently, it takes two major steps to create a new box, as [GitHub Templates](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository) does not currently allow customization. Therefore, the first step here is to transfer the unmodified template into a new repo. Then the repo is initialized by a GitHub action, i.e. individual customizations are made via cookiecutter and superfluous files are removed.
+## Integration into a CI/CD process
 
-# License
+Scenario: Install Your Application Name automatically on an existing system like your Test/Prod system. Since this is done via Docker containers here, the environment from which the installation is performed is always the same and there are no conflicts due to different Ansible versions on the installation host. This makes the installation more stable. You will be able to start the installation fully automatically with a simple click in the browser or even use a scheduled or triggered installation.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### GitLab CI/CD
+
+see https://github.com/TIBHannover/application-setup-box-template/wiki/Integration-of-automated-installation-into-GitLab-CI-CD-process
+
+also have a look at the [gitlab-config-example](doc/gitlab-config-example)
